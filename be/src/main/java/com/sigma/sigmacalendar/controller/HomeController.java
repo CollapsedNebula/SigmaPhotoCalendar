@@ -10,6 +10,6 @@ public class HomeController {
     @GetMapping("/")
     @ResponseBody
     public String home() {
-        return "Welcome to Sigma Calendar!";
+        return "Welcome to Sigma Calendar Backend!";
     }
 }

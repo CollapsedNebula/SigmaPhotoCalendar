@@ -18,6 +18,7 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/signup").permitAll()  // 루트 페이지는 모든 사용자 접근 가능
+                .requestMatchers("/api/login").permitAll()  // 루트 페이지는 모든 사용자 접근 가능
                 .anyRequest().authenticated()  // 나머지는 로그인 필요
             )
             .formLogin(login -> login.disable()) // 기본 로그인 폼 비활성화
@@ -26,7 +27,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // ✅ 추가할 부분: PasswordEncoder 빈 등록
+    //  비밀번호 암호화
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

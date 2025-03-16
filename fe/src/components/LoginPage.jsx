@@ -1,7 +1,34 @@
-import "../css/LoginPage.css";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
 
 function LoginPage() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleLogin = async () => {
+        if (!email || !password) {
+            alert("이메일과 비밀번호를 입력해주세요.");
+            return;
+        }
+
+        try {
+            const response = await axios.post("http://localhost:8080/api/login", {
+                user_id: email,
+                password: password,
+            });
+
+            alert("로그인 성공!");
+        } catch (error) {
+            if (error.response) {
+                alert(`로그인 실패! 오류: ${error.response.data.message}`);
+            } else {
+                alert("로그인 실패! 백엔드가 실행 중인지 확인하세요.");
+            }
+            console.error("Error:", error);
+        }
+    };
+
     return (
         <>
             <div className="flex flex-col items-center space-y-2">
@@ -11,6 +38,8 @@ function LoginPage() {
                         type="text"
                         placeholder="이메일을 입력해주세요"
                         className="border border-stone-400 p-2 pl-4 pr-4 w-xs rounded-lg"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                     ></input>
                 </div>
                 <div>
@@ -18,6 +47,8 @@ function LoginPage() {
                         type="password"
                         placeholder="비밀번호를 입력해주세요"
                         className="border border-stone-400 p-2 pl-4 pr-4 w-xs rounded-lg"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                     ></input>
                 </div>
                 <div className="flex items-center space-x-2 mr-35">
@@ -26,7 +57,9 @@ function LoginPage() {
                         회원가입
                     </Link>
                 </div>
-                <button className="bg-stone-700 text-white p-2 mt-5 w-xs rounded-lg">로그인</button>
+                <button className="bg-stone-700 text-white p-2 mt-5 w-xs rounded-lg" onClick={handleLogin}>
+                    로그인
+                </button>
             </div>
         </>
     );
