@@ -1,10 +1,32 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import axios from "axios";
+import { useAuth } from "../AuthContext";
 
 function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const { setAccessToken } = useAuth();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const checkAutoLogin = async () => {
+            try {
+                const response = await axios.post("http://localhost:8080/api/refresh", {}, { withCredentials: true });
+
+                if (response.data.access_token) {
+                    setAccessToken(response.data.access_token);
+                    console.log("자동 로그인 성공");
+                    navigate("/dashboard");
+                } else {
+                    console.log("accessToken이 없습니다.");
+                }
+            } catch (error) {
+                console.log("자동 로그인 실패", error);
+            }
+        };
+        checkAutoLogin();
+    }, [navigate]);
 
     const handleLogin = async () => {
         if (!email || !password) {
@@ -13,12 +35,18 @@ function LoginPage() {
         }
 
         try {
-            const response = await axios.post("http://localhost:8080/api/login", {
-                user_id: email,
-                password: password,
-            });
+            const response = await axios.post(
+                "http://localhost:8080/api/login",
+                {
+                    user_id: email,
+                    password: password,
+                },
+                { withCredentials: true }
+            );
 
+            setAccessToken(response.data.accessToken);
             alert("로그인 성공!");
+            navigate("/dashboard");
         } catch (error) {
             if (error.response) {
                 alert(`로그인 실패! 오류: ${error.response.data.message}`);

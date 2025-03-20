@@ -19,6 +19,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/signup").permitAll()  // 루트 페이지는 모든 사용자 접근 가능
                 .requestMatchers("/api/login").permitAll()  // 루트 페이지는 모든 사용자 접근 가능
+                .requestMatchers("/api/refresh").permitAll()  // 루트 페이지는 모든 사용자 접근 가능
+                .requestMatchers( "/api/logout").permitAll()  // 루트 페이지는 모든 사용자 접근 가능
                 .anyRequest().authenticated()  // 나머지는 로그인 필요
             )
             .formLogin(login -> login.disable()) // 기본 로그인 폼 비활성화

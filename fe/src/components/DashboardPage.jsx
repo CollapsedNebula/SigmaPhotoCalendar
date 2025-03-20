@@ -1,6 +1,7 @@
 import { useState } from "react";
 import FormattedDate from "./FormattedDate.jsx";
 import Calendar from "./Calendar.jsx";
+import Logout from "./Logout.jsx";
 
 function DashboardPage() {
     const today = new Date();
@@ -21,7 +22,6 @@ function DashboardPage() {
     return (
         <>
             <div className="flex flex-col">
-                {/* 원래 헤더 유지 */}
                 <div className="flex">
                     <button className="ml-2">
                         <img src="/menu.png" className="scale-70" alt="menu" />
@@ -30,6 +30,7 @@ function DashboardPage() {
                     <button onClick={() => setIsModalOpen(true)}>
                         <img src="/down.png" className="scale-70" alt="down" />
                     </button>
+                    <Logout />
                 </div>
 
                 {/* 연도 & 월 선택 모달 */}
